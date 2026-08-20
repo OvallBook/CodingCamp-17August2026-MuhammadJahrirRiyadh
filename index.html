@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense & Budget Visualizer</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <span class="logo">💰 BudgetTrack</span>
+      </div>
+      <div class="header-right">
+        <button id="themeToggle" class="btn-icon" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+
+      <!-- Total Balance Card -->
+      <section class="balance-card" aria-label="Total Balance">
+        <p class="balance-label">Total Balance</p>
+        <h1 class="balance-amount" id="totalBalance">Rp 0</h1>
+        <div class="balance-stats">
+          <div class="stat income">
+            <span class="stat-icon">⬆️</span>
+            <div>
+              <p class="stat-label">Income</p>
+              <p class="stat-value" id="totalIncome">Rp 0</p>
+            </div>
+          </div>
+          <div class="stat expense">
+            <span class="stat-icon">⬇️</span>
+            <div>
+              <p class="stat-label">Expenses</p>
+              <p class="stat-value" id="totalExpense">Rp 0</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Two-column grid: Form + Chart -->
+      <div class="grid-two">
+
+        <!-- Add Transaction Form -->
+        <section class="card" aria-label="Add Transaction">
+          <h2 class="card-title">Add Transaction</h2>
+          <form id="transactionForm" novalidate>
+
+            <div class="form-group">
+              <label for="itemName">Item Name</label>
+              <input
+                type="text"
+                id="itemName"
+                placeholder="e.g. Lunch, Bus fare…"
+                autocomplete="off"
+                maxlength="60"
+              />
+              <span class="error-msg" id="errName"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="amount">Amount (Rp)</label>
+              <input
+                type="number"
+                id="amount"
+                placeholder="e.g. 15000"
+                min="1"
+              />
+              <span class="error-msg" id="errAmount"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <div class="select-wrapper">
+                <select id="category">
+                  <option value="" disabled selected>Select a category</option>
+                  <option value="Food">🍔 Food</option>
+                  <option value="Transport">🚌 Transport</option>
+                  <option value="Fun">🎮 Fun</option>
+                </select>
+              </div>
+              <span class="error-msg" id="errCategory"></span>
+            </div>
+
+            <!-- Custom Category Row -->
+            <div class="form-group custom-cat-row" id="customCatRow" style="display:none;">
+              <label for="customCategory">New Category Name</label>
+              <div class="custom-cat-inputs">
+                <input
+                  type="text"
+                  id="customCategory"
+                  placeholder="e.g. Health, Shopping…"
+                  maxlength="30"
+                />
+                <input
+                  type="text"
+                  id="customEmoji"
+                  placeholder="🏷️"
+                  maxlength="4"
+                  class="emoji-input"
+                />
+                <button type="button" id="addCategoryBtn" class="btn btn-secondary">Add</button>
+              </div>
+              <span class="error-msg" id="errCustomCat"></span>
+            </div>
+
+            <button type="button" id="toggleCustomCat" class="btn-link">
+              + Add custom category
+            </button>
+
+            <div class="form-group">
+              <label for="transType">Transaction Type</label>
+              <div class="radio-group">
+                <label class="radio-label expense-radio">
+                  <input type="radio" name="transType" value="expense" checked />
+                  <span>Expense</span>
+                </label>
+                <label class="radio-label income-radio">
+                  <input type="radio" name="transType" value="income" />
+                  <span>Income</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              Add Transaction
+            </button>
+          </form>
+        </section>
+
+        <!-- Pie Chart -->
+        <section class="card chart-card" aria-label="Spending by Category">
+          <h2 class="card-title">Spending by Category</h2>
+          <div class="chart-wrapper">
+            <canvas id="expenseChart" aria-label="Pie chart of expenses by category" role="img"></canvas>
+          </div>
+          <p class="chart-empty" id="chartEmpty">No expense data yet.</p>
+        </section>
+
+      </div><!-- /.grid-two -->
+
+      <!-- Transaction List -->
+      <section class="card" aria-label="Transaction History">
+        <div class="list-header">
+          <h2 class="card-title">Transaction History</h2>
+          <div class="list-controls">
+            <label for="sortSelect" class="sr-only">Sort by</label>
+            <select id="sortSelect" class="sort-select">
+              <option value="date-desc">Newest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="amount-desc">Highest Amount</option>
+              <option value="amount-asc">Lowest Amount</option>
+              <option value="category-asc">Category A–Z</option>
+            </select>
+          </div>
+        </div>
+
+        <ul class="transaction-list" id="transactionList" aria-live="polite">
+          <!-- items injected by JS -->
+        </ul>
+
+        <p class="list-empty" id="listEmpty">No transactions yet. Add one above!</p>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>BudgetTrack &mdash; Muhammad Jahrir Riyadh &mdash; CodingCamp 2026</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
